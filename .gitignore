@@ -1,0 +1,10 @@
+# Development
+.venv
+__pycache__/
+*.pyc
+
+# IDE
+.vscode
+
+# Project
+launcher/
