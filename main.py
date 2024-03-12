@@ -32,8 +32,8 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    quest = Quest(Quests.HUNDRED_ROOM_DUNGEON)
+    quest = Quest(Quests.CASTLE_VALTRITH)
     repeat = 7
-    record = True
+    record = False
 
     main(quest, repeat, record)

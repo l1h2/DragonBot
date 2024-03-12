@@ -4,6 +4,7 @@ from typing import Callable
 from utils import RGB, Actions, Point2, wait_for_timeout
 
 from .braughlmurk_cape import braughlmurk_bindings, shadow_bones
+from .castle_valtrith import castle_valtrith
 from .haunted_castle import haunted_castle
 from .hundred_room_dungeon import hundred_room_dungeon
 
@@ -34,6 +35,7 @@ class Quests:
     SHADOW_BONES = QuestParams(shadow_bones, (1555, 830), (12, 10, 8))
     BRAUGHLMURK_BINDINGS = QuestParams(braughlmurk_bindings, (1555, 830), (12, 10, 8))
     HUNDRED_ROOM_DUNGEON = QuestParams(hundred_room_dungeon, (870, 35), (130, 164, 242))
+    CASTLE_VALTRITH = QuestParams(castle_valtrith, (830, 200), (234, 210, 176))
 
 
 class Quest:

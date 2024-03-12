@@ -46,6 +46,10 @@ class CombatMoves(Enum):
     CYCLE_FOE = "tab"
 
 
+class ExploreActions(Enum):
+    JUMP = "space"
+
+
 class Menus(Enum):
     INVENTORY = "i"
     INVENTORY_CLICK = (840, 950)

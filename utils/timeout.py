@@ -40,9 +40,8 @@ def wait_for_timeout(
     """
     if isinstance(action, Actions):
         action = action.value
-
     x, y = coord
-    start_time = time.monotonic()
+    start_time = time.time()
     while pyautogui.pixel(x, y) != rgb:
-        if time.monotonic() - start_time > timeout:
+        if time.time() - start_time > timeout:
             raise TimeoutError("Timed out waiting for " + action)
