@@ -33,7 +33,7 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
 if __name__ == "__main__":
     quest = Quest(Quests.SUPPLY_GRAB)
-    repeat = 7
+    repeat = 20
     record = False
 
     main(quest, repeat, record)

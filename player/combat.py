@@ -47,7 +47,7 @@ class Combat:
             in_battle = self.__combat_turn(self.pet_moves, turn)
 
         keyboard.press("space")  # End battle
-        self.__check_level_up()
+        self.__post_battle()
 
     def __wait_for_turn(self) -> None:
         """
@@ -99,14 +99,14 @@ class Combat:
         self.__select_move(moves, turn)
         return not self.__check_victory()
 
-    def __check_level_up(self) -> None:
+    def __post_battle(self) -> None:
         """
-        Checks if the player has leveled up and clicks the level up button if so.
+        Checks if the player has leveled up and other battle rewards.
         """
         if pyautogui.pixel(1626, 863) == (44, 47, 54):
             return
 
         time.sleep(1)
         while pyautogui.pixel(960, 1000) == (0, 0, 0):
-            pyautogui.click(x=960, y=800)  # Level up
+            pyautogui.click(x=960, y=800)  # Level up and rewards
             time.sleep(0.5)
