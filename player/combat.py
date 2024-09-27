@@ -29,15 +29,29 @@ class Combat:
         self.player_moves = player_moves
         self.pet_moves = pet_moves
 
+    @property
+    def need_heal(self) -> bool:
+        """
+        Returns True if the player needs to use a healing potion.
+        """
+        return pyautogui.pixel(450, 970) != (229, 0, 0)
+
     def battle(self) -> None:
         """
         Perform combat turns until the battle is won.
         """
         turn = 0
         in_battle = True
+        used_heal = False
 
         while in_battle:
             turn += 1
+
+            # if self.need_heal and not used_heal:
+            #     in_battle = self.__defensive_turn()
+            #     used_heal = True
+            #     turn -= 1
+            #     continue
 
             in_battle = self.__combat_turn(self.player_moves, turn)
 
@@ -63,11 +77,20 @@ class Combat:
             moves (list[CombatMoves]): The moves available.
             turn (int): The current turn number.
         """
-        if len(moves) > turn:
+        if len(moves) >= turn:
             move = moves[turn - 1]
         else:
             move = CombatMoves.ATTACK
 
+        self.__use_move(move)
+
+    def __use_move(self, move: CombatMoves) -> None:
+        """
+        Performs a move in combat.
+
+        Args:
+            move (CombatMoves): The move to perform.
+        """
         while pyautogui.pixel(*self.__attack_xy) == self.__attack_rgb:
             time.sleep(0.3)
             keyboard.press(move.value)
@@ -98,6 +121,18 @@ class Combat:
         self.__wait_for_turn()
         self.__select_move(moves, turn)
         return not self.__check_victory()
+
+    def __defensive_turn(self):
+        player_heal = CombatMoves.THREE
+        pet_heal = CombatMoves.SIX
+
+        in_battle = self.__combat_turn([player_heal], 1)
+
+        if not in_battle:
+            return in_battle
+
+        in_battle = self.__combat_turn([pet_heal], 1)
+        return in_battle
 
     def __post_battle(self) -> None:
         """

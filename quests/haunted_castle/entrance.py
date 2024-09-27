@@ -12,7 +12,6 @@ def start_quest() -> None:
     player.check_screen((560, 800), (137, 68, 1), "initial")
 
     pyautogui.click(x=770, y=560)  # NPC dialogue
-
     wait_for_timeout((1270, 200), (255, 255, 255), Actions.NPC_DIALOGUE)
 
     pyautogui.click(x=1270, y=500)  # Heal

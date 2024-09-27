@@ -158,7 +158,8 @@ class Exploration:
             tuple[int, int]: The next origin to move from.
         """
         time.sleep(0.1)  # Wait for screen transition
-        self.__remove_white_text_bar()
+        self.remove_white_text_bar()
+        self.dismiss_dialog()
         available_directions = self.__get_directions(origin)
         self.__check_for_branches(origin, available_directions)
         next_direction = self.__update_active_nodes(available_directions[0])
@@ -177,6 +178,16 @@ class Exploration:
             return True
         else:
             return False
+
+    def reset_navigation(self, path_rgb: DirectionsRGB | None = None) -> None:
+        """
+        Resets the navigation by clearing the active nodes list.
+        """
+        self.__active_nodes.clear()
+        self.__current_depth = 1
+
+        if path_rgb:
+            self.path_rgb = path_rgb
 
     def keep_moving(self, origin: Point2, wait: bool = True) -> None:
         """
@@ -234,6 +245,26 @@ class Exploration:
         wait_for_timeout((1020, 850), (83, 25, 14), Actions.REWARD_SCREEN)
         pyautogui.click(x=960, y=800)
 
+    def remove_white_text_bar(self) -> None:
+        """
+        Removes the white text bar from the screen.
+        """
+        if pyautogui.pixel(1500, 40) != (255, 255, 255):
+            return
+
+        pyautogui.click(x=1500, y=40)
+        time.sleep(0.1)
+
+    def dismiss_dialog(self) -> None:
+        """
+        Dismisses the dialog box.
+        """
+        if pyautogui.pixel(530, 840) != (95, 77, 58):
+            return
+
+        pyautogui.click(x=960, y=745)
+        time.sleep(0.1)
+
     def __go(self, direction: Point2, wait: bool = True) -> None:
         """
         Moves the player in the specified direction.
@@ -243,8 +274,12 @@ class Exploration:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
         pyautogui.click(*direction)
+
         if wait:
-            wait_for_timeout((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
+            try:
+                wait_for_timeout((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
+            except TimeoutError as e:
+                print("Missed screen transition:", e)  # Log the error
 
     def __travel_map(self, book1: bool = True) -> None:
         """
@@ -273,16 +308,6 @@ class Exploration:
         pyautogui.click(x=1500, y=775)  # Confirm destination
         wait_for_timeout(arrival_xy, arrival_rgb, Actions.DUNGEON_ENTRANCE)
 
-    def __remove_white_text_bar(self) -> None:
-        """
-        Removes the white text bar from the screen.
-        """
-        if pyautogui.pixel(1200, 50) != (255, 255, 255):
-            return
-
-        pyautogui.click(x=1200, y=50)  # Remove white text bar
-        time.sleep(0.1)
-
     def __get_directions(self, origin: Point2 | None) -> list[Point2]:
         """
         Gets the available directions to move in from the current position.
@@ -294,7 +319,7 @@ class Exploration:
             list[tuple[int, int]]: The available directions to move in.
 
         Raises:
-            Exception: If no path is found.
+            ValueError: If no path is found.
         """
         available_directions = [
             direction
@@ -316,7 +341,7 @@ class Exploration:
         ]
 
         if not available_directions:
-            raise Exception("No path found")
+            raise ValueError("No path found")
         return available_directions
 
     def __check_for_branches(

@@ -53,8 +53,8 @@ class Player(Exploration, Combat):
         if pyautogui.pixel(*coord) == rgb:
             return
 
-        raise Exception(
-            "Not in {} screen. Please go to the beginning and try again.".format(screen)
+        raise ValueError(
+            f"Not in {screen} screen. Please go to the beginning and try again."
         )
 
     def dungeon_crawl(self, requires_confirmation: bool = False) -> None:
@@ -75,12 +75,10 @@ class Player(Exploration, Combat):
                     self.battle()
                     self.keep_moving(next_origin)
 
-            except Exception as e:
-                if str(e) != "No path found":
-                    raise e
+            except ValueError:
                 if self.find_boss(next_origin):
                     self.battle()
                     self.finish_quest(next_origin, requires_confirmation)
                     quest_finished = True
-                else:
-                    next_origin = None
+
+                next_origin = None

@@ -25,6 +25,7 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
     except Exception as e:
         print("Process terminated:", e)
+        raise
 
     finally:
         if record:
@@ -32,8 +33,8 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    quest = Quest(Quests.SUPPLY_GRAB)
+    quest = Quest(Quests.BATTLE_SPIRE)
     repeat = 20
-    record = False
+    record = True
 
     main(quest, repeat, record)

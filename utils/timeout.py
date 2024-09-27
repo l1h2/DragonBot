@@ -24,7 +24,7 @@ class Actions(Enum):
 
 
 def wait_for_timeout(
-    coord: Point2, rgb: RGB, action: Actions | str, timeout: int = 15
+    coord: Point2, rgb: RGB, action: Actions | str, timeout: int = 5
 ) -> None:
     """
     Waits for a specific pixel color to appear on the screen at the given coordinates.
@@ -40,8 +40,10 @@ def wait_for_timeout(
     """
     if isinstance(action, Actions):
         action = action.value
+
     x, y = coord
     start_time = time.time()
+    end_time = start_time + timeout
     while pyautogui.pixel(x, y) != rgb:
-        if time.time() - start_time > timeout:
-            raise TimeoutError("Timed out waiting for " + action)
+        if time.time() > end_time:
+            raise TimeoutError(f"Timed out waiting for {action} at {time.time()}.")
