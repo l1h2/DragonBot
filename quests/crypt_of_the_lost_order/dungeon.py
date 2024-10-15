@@ -32,11 +32,11 @@ def crypt_of_the_lost_order_dungeon() -> None:
     ]
     pet_moves = [
         CombatMoves.SEVEN,
+        CombatMoves.SIX,
+        CombatMoves.FOUR,
         CombatMoves.ONE,
         CombatMoves.THREE,
-        CombatMoves.FOUR,
         CombatMoves.FIVE,
-        CombatMoves.SIX,
     ]
     path_rgb = FLOORS[1]
     battle_xy = (1500, 975)

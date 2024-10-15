@@ -54,7 +54,7 @@ def fight(player: Player) -> None:
 
         battle += 1
         player.battle()
-        wait_for_timeout((300, 800), (48, 96, 47), Actions.DUNGEON_ENTRANCE)
+        wait_for_timeout((300, 700), (48, 96, 47), Actions.DUNGEON_ENTRANCE)
         time.sleep(0.5) if battle < 5 else time.sleep(1)
 
         try:

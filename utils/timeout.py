@@ -20,6 +20,7 @@ class Actions(Enum):
     QUEST_RESTART = "quest restart"
     REWARD_SCREEN = "reward screen"
     SCREEN_TRANSITION = "screen transition"
+    PLAYER_MOVEMENT = "player movement"
     TRAVEL_MAP = "travel map"
 
 
@@ -41,9 +42,8 @@ def wait_for_timeout(
     if isinstance(action, Actions):
         action = action.value
 
-    x, y = coord
     start_time = time.time()
     end_time = start_time + timeout
-    while pyautogui.pixel(x, y) != rgb:
+    while pyautogui.pixel(*coord) != rgb:
         if time.time() > end_time:
             raise TimeoutError(f"Timed out waiting for {action} at {time.time()}.")

@@ -15,4 +15,4 @@ def start_quest() -> None:
     wait_for_timeout((1500, 740), (109, 75, 29), Actions.NPC_DIALOGUE)
 
     pyautogui.click(x=960, y=400)  # Join
-    wait_for_timeout((300, 800), (48, 96, 47), Actions.DUNGEON_ENTRANCE)
+    wait_for_timeout((300, 700), (48, 96, 47), Actions.DUNGEON_ENTRANCE)

@@ -10,6 +10,7 @@ from .crypt_of_the_lost_order import crypt_of_the_lost_order_dungeon
 from .haunted_castle import haunted_castle
 from .hundred_room_dungeon import hundred_room_dungeon
 from .supply_grab import supply_grab
+from .trick_or_treat import trick_or_treating
 
 
 @dataclass
@@ -35,8 +36,8 @@ class Quests:
     """
 
     HAUNTED_CASTLE = QuestParams(haunted_castle, (560, 800), (137, 68, 1))
-    SHADOW_BONES = QuestParams(shadow_bones, (1555, 830), (12, 10, 8))
-    BRAUGHLMURK_BINDINGS = QuestParams(braughlmurk_bindings, (1555, 830), (12, 10, 8))
+    SHADOW_BONES = QuestParams(shadow_bones, (900, 100), (50, 50, 54))
+    BRAUGHLMURK_BINDINGS = QuestParams(braughlmurk_bindings, (1300, 480), (9, 10, 10))
     HUNDRED_ROOM_DUNGEON = QuestParams(hundred_room_dungeon, (870, 35), (130, 164, 242))
     CASTLE_VALTRITH = QuestParams(castle_valtrith, (830, 200), (234, 210, 176))
     SUPPLY_GRAB = QuestParams(supply_grab, (560, 485), (34, 0, 43))
@@ -44,6 +45,7 @@ class Quests:
         crypt_of_the_lost_order_dungeon, (870, 35), (130, 164, 242)
     )
     BATTLE_SPIRE = QuestParams(battle_spire, (1000, 100), (0, 0, 225))
+    TRICK_OR_TREAT = QuestParams(trick_or_treating, (600, 800), (159, 152, 95))
 
 
 class Quest:

@@ -11,42 +11,20 @@ class Quest(Enum):
     BRAUGHLMURK_BINDINGS = "BRAUGHLMURK_BINDINGS"
 
 
-def shadow_bones(player: Player) -> None:
+def shadow_bones() -> None:
     """
     Starts the shadow bones quest.
-
-    Args:
-        player (Player): The player object to use for the quest.
     """
-    pyautogui.click(x=960, y=780)  # Go down
-    player.wait_for_player_position((1025, 715), (126, 134, 163))
-
-    player.go_left()
-    player.go_left()
-    player.go_down()
-    player.go_right(False)
-
-    player.wait_for_player_position((1625, 210), (217, 69, 43))
-    pyautogui.click(x=1625, y=210)  # Enter sewer
-    wait_for_timeout((1315, 660), (36, 64, 84), Actions.DUNGEON_ENTRANCE)
+    pyautogui.click(x=875, y=90)  # Enter dungeon
+    wait_for_timeout((1040, 700), (52, 48, 47), Actions.DUNGEON_ENTRANCE)
 
 
-def braughlmurk_bindings(player: Player) -> None:
+def braughlmurk_bindings() -> None:
     """
     Starts the braughlmurk bindings quest.
-
-    Args:
-        player (Player): The player object to use for the quest.
     """
-    player.go_right()
-    player.go_right()
-    player.go_up()
-    player.go_right()
-    player.go_right(False)
-
-    player.wait_for_player_position((1625, 210), (217, 69, 43))
-    pyautogui.click(x=1625, y=210)  # Enter shipwreck
-    wait_for_timeout((960, 650), (20, 42, 46), Actions.DUNGEON_ENTRANCE)
+    pyautogui.click(x=1100, y=190)  # Enter dungeon
+    wait_for_timeout((1530, 500), (9, 9, 8), Actions.DUNGEON_ENTRANCE)
 
 
 def start_quest(quest: Quest) -> None:
@@ -60,12 +38,12 @@ def start_quest(quest: Quest) -> None:
         ValueError: If the quest is not valid.
     """
     player = Player()
-    player.check_screen((575, 335), (38, 38, 51), "initial")
-    player.menu_heal()
 
     if quest == Quest.SHADOW_BONES:
-        shadow_bones(player)
+        player.check_screen((900, 100), (50, 50, 54), "initial")
+        shadow_bones()
     elif quest == Quest.BRAUGHLMURK_BINDINGS:
-        braughlmurk_bindings(player)
+        player.check_screen((1300, 480), (9, 10, 10), "initial")
+        braughlmurk_bindings()
     else:
         raise ValueError(f"Invalid quest: {quest}")

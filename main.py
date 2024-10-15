@@ -17,7 +17,7 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
     try:
         if record:
             start_recording()
-        for _ in range(repeat + 1):
+        for _ in range(repeat):
             quest.start_quest()
             counter += 1
             print("Quests completed:", counter)
@@ -25,7 +25,6 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
     except Exception as e:
         print("Process terminated:", e)
-        raise
 
     finally:
         if record:
@@ -33,8 +32,8 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    quest = Quest(Quests.BATTLE_SPIRE)
+    quest = Quest(Quests.BRAUGHLMURK_BINDINGS)
     repeat = 20
-    record = True
+    record = False
 
     main(quest, repeat, record)

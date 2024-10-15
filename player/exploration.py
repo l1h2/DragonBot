@@ -102,16 +102,35 @@ class Exploration:
         """
         self.__go(self.directions.right, wait)
 
-    def wait_for_player_position(self, coord: Point2, rgb: RGB) -> None:
+    def go_to(self, coord: Point2, rgb: RGB = None, wait: bool = True) -> None:
+        """
+        Moves the player to the specified position.
+
+        Args:
+            coord (tuple[int, int]): The (x, y) coordinates of the position to move to.
+            rgb (tuple[int, int, int]): The RGB color value of the position to move to.
+            wait (bool, optional): Whether to wait for player movement. Defaults to True.
+        """
+        pyautogui.click(*coord)
+        if wait:
+            self.__wait(coord, rgb, Actions.PLAYER_MOVEMENT)
+
+    def wait_for_player_position(  # Legacy function to be removed
+        self, coord: Point2, rgb: RGB, timeout: float = 10
+    ) -> None:
         """
         Waits for the player to reach the specified position without screen transition.
 
         Args:
             coord (tuple[int, int]): The (x, y) coordinates of the position to reach.
             rgb (tuple[int, int, int]): The RGB color value when position is reached.
+            timeout (float, optional): The timeout value. Defaults to 10.
         """
+        start_time = time.time()
+
         while pyautogui.pixel(*coord) != rgb:
-            pass
+            if time.time() - start_time > timeout:
+                raise TimeoutError(f"Timed out waiting for player position")
 
     def menu_heal(self, close: bool = True) -> None:
         """
@@ -157,7 +176,6 @@ class Exploration:
         Returns:
             tuple[int, int]: The next origin to move from.
         """
-        time.sleep(0.1)  # Wait for screen transition
         self.remove_white_text_bar()
         self.dismiss_dialog()
         available_directions = self.__get_directions(origin)
@@ -222,7 +240,7 @@ class Exploration:
             self.__active_nodes[-1].backtrack = True
         return found_boss
 
-    def finish_quest(self, origin: Point2, requires_confirmation: bool) -> None:
+    def finish_quest(self, origin: Point2, requires_confirmation: bool = False) -> None:
         """
         Finishes the quest by completing the dungeon and claiming the reward.
 
@@ -274,12 +292,23 @@ class Exploration:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
         pyautogui.click(*direction)
-
         if wait:
-            try:
-                wait_for_timeout((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
-            except TimeoutError as e:
-                print("Missed screen transition:", e)  # Log the error
+            self.__wait((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
+
+    def __wait(self, coord: Point2, rgb: RGB, action: Actions) -> None:
+        """
+        Waits for the player to reach the specified position.
+
+        Args:
+            coord (tuple[int, int]): The (x, y) coordinates of the position to reach.
+            rgb (tuple[int, int, int]): The RGB color value when position is reached.
+            action (Actions): The action to be performed.
+        """
+        try:
+            wait_for_timeout(coord, rgb, action)
+            time.sleep(0.1)  # Wait for screen transition
+        except TimeoutError as e:
+            print("Missed transition:", e)  # Log the error
 
     def __travel_map(self, book1: bool = True) -> None:
         """
