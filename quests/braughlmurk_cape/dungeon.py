@@ -1,7 +1,7 @@
 import time
 
 from player import Player
-from utils import CombatMoves, Directions, DirectionsRGB
+from utils import CombatMoves
 
 from .entrance import Quest, start_quest
 
@@ -34,7 +34,7 @@ def shadow_bones() -> None:
 
     player.go_right()
     player.battle()
-    player.go_to((1385, 740), (75, 88, 98))
+    player.go_to((1385, 740), (56, 66, 71))
     time.sleep(1)  # Heal
     player.go_up()
 
@@ -66,7 +66,7 @@ def braughlmurk_bindings() -> None:
     player_moves = [
         CombatMoves.Z,
         CombatMoves.X,
-        CombatMoves.NINE,
+        CombatMoves.C,
         CombatMoves.SIX,
         CombatMoves.SIX,
     ]
@@ -81,7 +81,7 @@ def braughlmurk_bindings() -> None:
     player = Player(player_moves, pet_moves)
 
     start_quest(Quest.BRAUGHLMURK_BINDINGS)
-    player.go_to((1450, 620), (49, 58, 71))
+    player.go_to((1450, 620), (37, 43, 52))
     time.sleep(1)  # Heal
     player.go_left()
     player.battle()
@@ -95,7 +95,7 @@ def braughlmurk_bindings() -> None:
     player.battle()
     player.go_to((500, 60), (0, 0, 0))
 
-    player.go_to((470, 690), (45, 54, 66))
+    player.go_to((470, 690), (37, 43, 52))
     player.go_to((470, 85), (0, 0, 0))
 
     player.go_left()

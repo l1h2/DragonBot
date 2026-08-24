@@ -7,10 +7,15 @@ from .battle_spire import battle_spire
 from .braughlmurk_cape import braughlmurk_bindings, shadow_bones
 from .castle_valtrith import castle_valtrith
 from .crypt_of_the_lost_order import crypt_of_the_lost_order_dungeon
+from .doomwood_defense import doomwood_defense
 from .haunted_castle import haunted_castle
 from .hundred_room_dungeon import hundred_room_dungeon
+from .stone_circle import stone_circle
 from .supply_grab import supply_grab
+from .swordhaven_defense import swordhaven_defense
 from .trick_or_treat import trick_or_treating
+from .voltabolt_challenge import voltabolt_challenge
+from .war import war
 
 
 @dataclass
@@ -46,6 +51,11 @@ class Quests:
     )
     BATTLE_SPIRE = QuestParams(battle_spire, (1000, 100), (0, 0, 225))
     TRICK_OR_TREAT = QuestParams(trick_or_treating, (600, 800), (159, 152, 95))
+    STONE_CIRCLE = QuestParams(stone_circle, (570, 470), (98, 95, 34))
+    SWORDHAVEN_DEFENSE = QuestParams(swordhaven_defense, (1500, 800), (149, 96, 28))
+    DOOMWOOD_DEFENSE = QuestParams(doomwood_defense, (1145, 845), (255, 255, 255))
+    VOLTABOLT_CHALLENGE = QuestParams(voltabolt_challenge, (620, 380), (153, 153, 153))
+    WAR = QuestParams(war, (1500, 500), (234, 206, 166))
 
 
 class Quest:

@@ -1,10 +1,5 @@
-import random
-import time
-
-import pyautogui
-
 from player import Player
-from utils import CombatMoves, wait_for_timeout
+from utils import CombatMoves
 
 from .entrance import start_quest
 
@@ -14,9 +9,9 @@ def haunted_castle() -> None:
     Executes the haunted castle quest.
     """
     player_moves = [
-        CombatMoves.NINE,
-        CombatMoves.V,
         CombatMoves.Z,
+        CombatMoves.X,
+        CombatMoves.NINE,
         CombatMoves.SIX,
         CombatMoves.SIX,
     ]
@@ -40,90 +35,63 @@ def navigate_castle(player: Player) -> None:
     Args:
         player (Player): The player object.
     """
-    pyautogui.click(x=935, y=520)  # Go up
+    player.go_up()
     player.battle()
-    pyautogui.click(x=935, y=520)  # Go up
+    player.go_up()
 
-    wait_for_timeout((970, 300), (57, 0, 0), "castle entrance")
-    pyautogui.click(x=1400, y=500)  # Go right
+    player.go_right()
     player.battle()
-    pyautogui.click(x=1600, y=500)  # Go right
+    player.go_to((1600, 500))
 
-    wait_for_timeout((1600, 530), (57, 0, 0), "right hallway")
-    pyautogui.click(x=1400, y=500)  # Go right
+    player.go_right()
     player.battle()
-    pyautogui.click(x=800, y=800)  # Go down
-
-    player.wait_for_player_position((750, 745), (126, 134, 163))
-    pyautogui.click(x=1600, y=800)  # Go right
+    player.go_to((800, 800), (75, 88, 98))
+    player.go_to((1600, 800))
     player.battle()
-    pyautogui.click(x=1600, y=600)  # Go right
+    player.go_right()
 
-    wait_for_timeout((1500, 215), (57, 0, 0), "hallway end")
-    pyautogui.click(x=375, y=800)  # Go down
-
-    player.wait_for_player_position((395, 795), (131, 154, 167))
-    pyautogui.click(x=1600, y=800)  # Go right
-
-    player.wait_for_player_position((1480, 715), (126, 134, 163))
-    pyautogui.click(x=1530, y=215)  # Go up
+    player.go_to((375, 800), (75, 88, 98))
+    player.go_to((1550, 800), (153, 168, 174))
+    player.go_to((1580, 100))
     player.battle()
-    pyautogui.click(x=1450, y=130)  # Go up
+    player.go_to((1450, 130))
 
-    wait_for_timeout((445, 150), (57, 0, 0), "stairs")
-    pyautogui.click(x=445, y=150)  # Go left
+    player.go_to((445, 150))
     player.battle()
-    pyautogui.click(x=445, y=150)  # Go left
+    player.go_to((445, 150))
     player.battle()
-    pyautogui.click(x=445, y=150)  # Go up
+    player.go_to((445, 150))
 
-    wait_for_timeout((1400, 485), (69, 0, 0), "top of stairs")
-    pyautogui.click(x=960, y=160)  # Go up
+    player.go_up()
     player.battle()
-    pyautogui.click(x=960, y=850)  # Go down
+    player.go_down()
 
-    wait_for_timeout((445, 150), (57, 0, 0), "stairs return")
-    pyautogui.click(x=1425, y=820)  # Go down
+    player.go_to((1425, 820))
 
-    wait_for_timeout((1500, 215), (57, 0, 0), "hallway end return")
-    pyautogui.click(x=1455, y=820)  # Go down
+    player.go_to((1460, 800), (75, 88, 98))
+    player.go_to((445, 815), (75, 88, 98))
+    player.go_left()
 
-    player.wait_for_player_position((1446, 792), (131, 154, 167))
-    pyautogui.click(x=310, y=825)  # Go left
+    player.go_to((1050, 815), (75, 88, 98))
+    player.go_to((290, 620))
 
-    player.wait_for_player_position((440, 730), (126, 133, 162))
-    pyautogui.click(x=280, y=540)  # Go up
-
-    wait_for_timeout((1600, 530), (57, 0, 0), "right hallway return")
-    pyautogui.click(x=1042, y=840)  # Go left
-
-    player.wait_for_player_position((1060, 720), (126, 133, 162))
-    pyautogui.click(x=290, y=620)  # Go left
-
-    wait_for_timeout((970, 300), (57, 0, 0), "castle entrance return")
-    pyautogui.click(x=970, y=300)  # Go up
+    player.go_up()
     player.battle()
-    pyautogui.click(x=970, y=300)  # Go up
+    player.go_up()
 
-    wait_for_timeout((960, 170), (72, 54, 46), "main hall")
-    pyautogui.click(x=960, y=525)  # Go up
-    time.sleep(random.uniform(1, 2))  # Heal
-    pyautogui.click(x=1600, y=500)  # Go right
+    player.go_right()
     player.battle()
-    pyautogui.click(x=1600, y=500)  # Go right
+    player.go_to((1600, 500))
 
-    wait_for_timeout((1500, 500), (102, 0, 0), "servant quarters")
-    pyautogui.click(x=1100, y=500)  # Go right
+    player.go_right()
     player.battle()
-    pyautogui.click(x=280, y=500)  # Go left
+    player.go_to((280, 500))
 
-    wait_for_timeout((960, 170), (72, 54, 46), "main hall return")
-    pyautogui.click(x=960, y=525)  # Go left
-    time.sleep(random.uniform(1, 2))  # Heal
-    pyautogui.click(x=960, y=250)  # Go up
+    player.remove_white_text_bar()
+    player.go_up()
     player.battle()
-    pyautogui.click(x=960, y=250)  # Go up
+    player.go_up()
 
-    wait_for_timeout((960, 170), (75, 1, 1), "final room")
-    pyautogui.click(x=960, y=250)  # Go up
+    player.remove_white_text_bar()
+    player.go_up()
     player.battle()

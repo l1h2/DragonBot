@@ -32,8 +32,8 @@ def main(quest: Quest, repeat: int = 0, record: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    quest = Quest(Quests.BRAUGHLMURK_BINDINGS)
-    repeat = 20
+    quest = Quest(Quests.WAR)
+    repeat = 1000
     record = False
 
     main(quest, repeat, record)

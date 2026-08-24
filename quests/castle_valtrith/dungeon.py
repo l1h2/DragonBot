@@ -13,14 +13,15 @@ def castle_valtrith() -> None:
     """
     player_moves = [
         CombatMoves.Z,
-        CombatMoves.C,
         CombatMoves.X,
+        CombatMoves.NINE,
         CombatMoves.V,
         CombatMoves.SIX,
         CombatMoves.SIX,
     ]
     pet_moves = [
         CombatMoves.SEVEN,
+        CombatMoves.V,
         CombatMoves.ONE,
         CombatMoves.FOUR,
         CombatMoves.THREE,
@@ -65,7 +66,7 @@ def navigate_castle(player: Player) -> None:
 
     wait_for_timeout((900, 800), (0, 0, 0), "broken hallway")
     player.go_right(False)
-    while pyautogui.pixel(845, 715) == (0, 0, 0):
+    while pyautogui.pixel(860, 715) == (0, 0, 0):
         pass
     keyboard.press(ExploreActions.JUMP.value)
 

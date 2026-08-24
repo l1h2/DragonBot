@@ -18,10 +18,10 @@ class Combat:
     - `battle`: Perform combat turns until the battle is won.
     """
 
-    __attack_xy = (960, 810)
-    __attack_rgb = (166, 26, 26)
-    __victory_xy = (975, 189)
-    __victory_rgb = (254, 228, 236)
+    _attack_xy = (960, 810)
+    _attack_rgb = (166, 26, 26)
+    _victory_xy = (975, 189)
+    _victory_rgb = (254, 228, 236)
 
     def __init__(
         self, player_moves: list[CombatMoves], pet_moves: list[CombatMoves]
@@ -48,28 +48,28 @@ class Combat:
             turn += 1
 
             # if self.need_heal and not used_heal:
-            #     in_battle = self.__defensive_turn()
+            #     in_battle = self._defensive_turn()
             #     used_heal = True
             #     turn -= 1
             #     continue
 
-            in_battle = self.__combat_turn(self.player_moves, turn)
+            in_battle = self._combat_turn(self.player_moves, turn)
 
             if not in_battle:
                 break
 
-            in_battle = self.__combat_turn(self.pet_moves, turn)
+            in_battle = self._combat_turn(self.pet_moves, turn)
 
         keyboard.press("space")  # End battle
-        self.__post_battle()
+        self._post_battle()
 
-    def __wait_for_turn(self) -> None:
+    def _wait_for_turn(self) -> None:
         """
         Waits for the player's turn in combat.
         """
-        wait_for_timeout(self.__attack_xy, self.__attack_rgb, Actions.COMBAT_TURN)
+        wait_for_timeout(self._attack_xy, self._attack_rgb, Actions.COMBAT_TURN)
 
-    def __select_move(self, moves: list[CombatMoves], turn: int) -> None:
+    def _select_move(self, moves: list[CombatMoves], turn: int) -> None:
         """
         Selects a move to perform in combat.
 
@@ -82,32 +82,32 @@ class Combat:
         else:
             move = CombatMoves.ATTACK
 
-        self.__use_move(move)
+        self._use_move(move)
 
-    def __use_move(self, move: CombatMoves) -> None:
+    def _use_move(self, move: CombatMoves) -> None:
         """
         Performs a move in combat.
 
         Args:
             move (CombatMoves): The move to perform.
         """
-        while pyautogui.pixel(*self.__attack_xy) == self.__attack_rgb:
+        while pyautogui.pixel(*self._attack_xy) == self._attack_rgb:
             time.sleep(0.3)
             keyboard.press(move.value)
 
-    def __check_victory(self) -> bool:
+    def _check_victory(self) -> bool:
         """
         Checks if the battle has been won.
 
         Returns:
             bool: True if the battle has been won, False otherwise.
         """
-        while pyautogui.pixel(*self.__attack_xy) != self.__attack_rgb:
-            if pyautogui.pixel(*self.__victory_xy) == self.__victory_rgb:
+        while pyautogui.pixel(*self._attack_xy) != self._attack_rgb:
+            if pyautogui.pixel(*self._victory_xy) == self._victory_rgb:
                 return True
         return False
 
-    def __combat_turn(self, moves: list[CombatMoves], turn: int) -> bool:
+    def _combat_turn(self, moves: list[CombatMoves], turn: int) -> bool:
         """
         Performs a combat turn.
 
@@ -118,30 +118,29 @@ class Combat:
         Returns:
             bool: True if the battle is still ongoing, False if the battle has been won.
         """
-        self.__wait_for_turn()
-        self.__select_move(moves, turn)
-        return not self.__check_victory()
+        self._wait_for_turn()
+        self._select_move(moves, turn)
+        return not self._check_victory()
 
-    def __defensive_turn(self):
+    def _defensive_turn(self):
         player_heal = CombatMoves.THREE
         pet_heal = CombatMoves.SIX
 
-        in_battle = self.__combat_turn([player_heal], 1)
+        in_battle = self._combat_turn([player_heal], 1)
 
         if not in_battle:
             return in_battle
 
-        in_battle = self.__combat_turn([pet_heal], 1)
+        in_battle = self._combat_turn([pet_heal], 1)
         return in_battle
 
-    def __post_battle(self) -> None:
+    def _post_battle(self) -> None:
         """
         Checks if the player has leveled up and other battle rewards.
         """
-        if pyautogui.pixel(1626, 863) == (44, 47, 54):
-            return
-
         time.sleep(1)
         while pyautogui.pixel(960, 1000) == (0, 0, 0):
+            # keyboard.press(ExploreActions.ACCEPT.value)  # Level up and rewards
             pyautogui.click(x=960, y=800)  # Level up and rewards
+
             time.sleep(0.5)

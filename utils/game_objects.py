@@ -48,6 +48,11 @@ class CombatMoves(Enum):
 
 class ExploreActions(Enum):
     JUMP = "space"
+    ACCEPT = "space"
+    MOVE_UP = "w"
+    MOVE_LEFT = "a"
+    MOVE_DOWN = "s"
+    MOVE_RIGHT = "d"
 
 
 class Menus(Enum):

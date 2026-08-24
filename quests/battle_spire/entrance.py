@@ -6,7 +6,7 @@ from utils import Actions, wait_for_timeout
 
 def start_quest() -> None:
     """
-    Starts the castle valtrith quest.
+    Starts the battle spire quest.
     """
     player = Player()
     player.check_screen((1000, 100), (0, 0, 225), "initial")

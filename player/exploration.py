@@ -3,15 +3,8 @@ from dataclasses import dataclass
 
 import pyautogui
 
-from utils import (
-    RGB,
-    Actions,
-    Directions,
-    DirectionsRGB,
-    Menus,
-    Point2,
-    wait_for_timeout,
-)
+from utils import (RGB, Actions, Directions, DirectionsRGB, Menus, Point2,
+                   wait_for_timeout)
 
 
 @dataclass
@@ -63,8 +56,8 @@ class Exploration:
         self.battle_xy = battle_xy
         self.directions = directions
 
-        self.__active_nodes: list[Node] = []
-        self.__current_depth: int = 1
+        self._active_nodes: list[Node] = []
+        self._current_depth: int = 1
 
     def go_up(self, wait: bool = True) -> None:
         """
@@ -73,7 +66,7 @@ class Exploration:
         Args:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
-        self.__go(self.directions.up, wait)
+        self._go(self.directions.up, wait)
 
     def go_down(self, wait: bool = True) -> None:
         """
@@ -82,7 +75,7 @@ class Exploration:
         Args:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
-        self.__go(self.directions.down, wait)
+        self._go(self.directions.down, wait)
 
     def go_left(self, wait: bool = True) -> None:
         """
@@ -91,7 +84,7 @@ class Exploration:
         Args:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
-        self.__go(self.directions.left, wait)
+        self._go(self.directions.left, wait)
 
     def go_right(self, wait: bool = True) -> None:
         """
@@ -100,9 +93,9 @@ class Exploration:
         Args:
             wait (bool, optional): Whether to wait for a screen transition after moving. Defaults to True.
         """
-        self.__go(self.directions.right, wait)
+        self._go(self.directions.right, wait)
 
-    def go_to(self, coord: Point2, rgb: RGB = None, wait: bool = True) -> None:
+    def go_to(self, coord: Point2, rgb: RGB = (0, 0, 0), wait: bool = True) -> None:
         """
         Moves the player to the specified position.
 
@@ -113,7 +106,7 @@ class Exploration:
         """
         pyautogui.click(*coord)
         if wait:
-            self.__wait(coord, rgb, Actions.PLAYER_MOVEMENT)
+            self._wait(coord, rgb, Actions.PLAYER_MOVEMENT)
 
     def wait_for_player_position(  # Legacy function to be removed
         self, coord: Point2, rgb: RGB, timeout: float = 10
@@ -163,8 +156,8 @@ class Exploration:
             book1 (bool, optional): Whether to open book 1 or book 3. Defaults to True.
         """
         self.menu_heal(close=False)
-        self.__travel_map(book1)
-        self.__fly(destination, arrival_xy, arrival_rgb)
+        self._travel_map(book1)
+        self._fly(destination, arrival_xy, arrival_rgb)
 
     def move(self, origin: Point2 | None = None) -> Point2:
         """
@@ -178,31 +171,31 @@ class Exploration:
         """
         self.remove_white_text_bar()
         self.dismiss_dialog()
-        available_directions = self.__get_directions(origin)
-        self.__check_for_branches(origin, available_directions)
-        next_direction = self.__update_active_nodes(available_directions[0])
-        return self.__move_and_update_origin(next_direction)
+        available_directions = self._get_directions(origin)
+        self._check_for_branches(origin, available_directions)
+        next_direction = self._update_active_nodes(available_directions[0])
+        return self._move_and_update_origin(next_direction)
 
-    def check_for_battle(self) -> bool:
+    def check_for_battle(self, wait: float = 0.6) -> bool:
         """
         Checks for a battle on the screen.
+
+        Args:
+            wait (float, optional): The time to wait before checking for a battle. Defaults to 0.6.
 
         Returns:
             bool: True if a battle is found, False otherwise.
         """
-        time.sleep(0.6)
-        if pyautogui.pixel(*self.battle_xy) == self.battle_rgb:
-            pyautogui.click(*self.directions.left)
-            return True
-        else:
-            return False
+        pyautogui.moveTo(*self.directions.left)
+        time.sleep(wait)
+        return pyautogui.pixelMatchesColor(*self.battle_xy, self.battle_rgb)
 
     def reset_navigation(self, path_rgb: DirectionsRGB | None = None) -> None:
         """
         Resets the navigation by clearing the active nodes list.
         """
-        self.__active_nodes.clear()
-        self.__current_depth = 1
+        self._active_nodes.clear()
+        self._current_depth = 1
 
         if path_rgb:
             self.path_rgb = path_rgb
@@ -237,7 +230,7 @@ class Exploration:
         time.sleep(1)
         found_boss = self.check_for_battle()
         if not found_boss:
-            self.__active_nodes[-1].backtrack = True
+            self._active_nodes[-1].backtrack = True
         return found_boss
 
     def finish_quest(self, origin: Point2, requires_confirmation: bool = False) -> None:
@@ -248,7 +241,7 @@ class Exploration:
             origin (tuple[int, int]): The (x, y) coordinates of the origin.
             requires_confirmation (bool): Whether the quest completion requires confirmation.
         """
-        self.__active_nodes.clear()
+        self._active_nodes.clear()
         self.keep_moving(origin, wait=False)
 
         if requires_confirmation:
@@ -283,7 +276,7 @@ class Exploration:
         pyautogui.click(x=960, y=745)
         time.sleep(0.1)
 
-    def __go(self, direction: Point2, wait: bool = True) -> None:
+    def _go(self, direction: Point2, wait: bool = True) -> None:
         """
         Moves the player in the specified direction.
 
@@ -293,9 +286,9 @@ class Exploration:
         """
         pyautogui.click(*direction)
         if wait:
-            self.__wait((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
+            self._wait((1600, 800), (0, 0, 0), Actions.SCREEN_TRANSITION)
 
-    def __wait(self, coord: Point2, rgb: RGB, action: Actions) -> None:
+    def _wait(self, coord: Point2, rgb: RGB, action: Actions) -> None:
         """
         Waits for the player to reach the specified position.
 
@@ -310,7 +303,7 @@ class Exploration:
         except TimeoutError as e:
             print("Missed transition:", e)  # Log the error
 
-    def __travel_map(self, book1: bool = True) -> None:
+    def _travel_map(self, book1: bool = True) -> None:
         """
         Opens the travel map.
 
@@ -324,7 +317,7 @@ class Exploration:
         pyautogui.click(x=960, y=770)  # Travel map
         wait_for_timeout((500, 750), (51, 118, 53), Actions.TRAVEL_MAP)
 
-    def __fly(self, destination: Point2, arrival_xy: Point2, arrival_rgb: RGB) -> None:
+    def _fly(self, destination: Point2, arrival_xy: Point2, arrival_rgb: RGB) -> None:
         """
         Flies to the specified destination on the travel map.
 
@@ -337,7 +330,7 @@ class Exploration:
         pyautogui.click(x=1500, y=775)  # Confirm destination
         wait_for_timeout(arrival_xy, arrival_rgb, Actions.DUNGEON_ENTRANCE)
 
-    def __get_directions(self, origin: Point2 | None) -> list[Point2]:
+    def _get_directions(self, origin: Point2 | None) -> list[Point2]:
         """
         Gets the available directions to move in from the current position.
 
@@ -373,7 +366,7 @@ class Exploration:
             raise ValueError("No path found")
         return available_directions
 
-    def __check_for_branches(
+    def _check_for_branches(
         self, origin: Point2 | None, directions: list[Point2]
     ) -> None:
         """
@@ -383,10 +376,10 @@ class Exploration:
             origin (tuple[int, int] | None): The (x, y) coordinates of the current position.
             directions (list[tuple[int, int]]): The available directions to move in.
         """
-        if not (len(directions) > 1 and self.__current_depth > 0):
+        if not (len(directions) > 1 and self._current_depth > 0):
             return
 
-        self.__active_nodes.append(
+        self._active_nodes.append(
             Node(
                 origin=origin,
                 unvisited_directions=directions,
@@ -396,7 +389,7 @@ class Exploration:
             )
         )
 
-    def __update_active_nodes(self, direction: Point2) -> Point2:
+    def _update_active_nodes(self, direction: Point2) -> Point2:
         """
         Updates the active nodes list after moving in a direction.
 
@@ -406,10 +399,10 @@ class Exploration:
         Returns:
             tuple[int, int]: The next direction to move in.
         """
-        if not self.__active_nodes:
+        if not self._active_nodes:
             return direction
 
-        active_node = self.__active_nodes[-1]
+        active_node = self._active_nodes[-1]
         new_direction = None
 
         if active_node.current_depth == 0:
@@ -419,17 +412,17 @@ class Exploration:
                 active_node.visited_directions.append(new_direction)
             else:
                 new_direction = active_node.origin
-                self.__active_nodes.pop()
-                self.__active_nodes[-1].backtrack = True
+                self._active_nodes.pop()
+                self._active_nodes[-1].backtrack = True
 
-        if self.__active_nodes[-1].backtrack:
-            self.__active_nodes[-1].current_depth -= 1
+        if self._active_nodes[-1].backtrack:
+            self._active_nodes[-1].current_depth -= 1
         else:
-            self.__active_nodes[-1].current_depth += 1
-        self.__current_depth = self.__active_nodes[-1].current_depth
+            self._active_nodes[-1].current_depth += 1
+        self._current_depth = self._active_nodes[-1].current_depth
         return new_direction or direction
 
-    def __move_and_update_origin(self, direction: Point2) -> Point2:
+    def _move_and_update_origin(self, direction: Point2) -> Point2:
         """
         Moves the player in the specified direction.
 
